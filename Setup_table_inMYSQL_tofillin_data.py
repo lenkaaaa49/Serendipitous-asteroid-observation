@@ -49,7 +49,7 @@ def makeMySQLtable(table_name,password):
                              {16} DEC(4,1),\
                              {17} TIMESTAMP,\
                              FOREIGN KEY (Special_id)\
-                             REFERENCES MIGO_INP(Special_id)\
+                             REFERENCES INPUT_Table(Special_id)\
                              ON DELETE CASCADE\
                              ON UPDATE CASCADE)".format(tab_col[16],tab_col[17],tab_col[0],
                              tab_col[1],tab_col[2],tab_col[3],tab_col[4],tab_col[5],
@@ -58,6 +58,18 @@ def makeMySQLtable(table_name,password):
                              tab_col[14],tab_col[15])
     
     cursor.execute(sql)
+    
+    #update Status in the input table to know if that line has been run already     
+    sql11= "UPDATE INPUT_Table SET Status='UPDATED' where Special_id='{0}'".format(tab_col[16])
+    print (sql11)
+    try:
+        # Execute the SQL command
+        cursor.execute(sql11)
+        # Commit your changes in the database
+        db.commit()
+    except:
+        # Rollback in case there is any error
+        db.rollback()
     
     # disconnect from server
     db.close()

@@ -18,9 +18,8 @@ import numpy.ma as ma
 def importDATA(password):
     #import input data from MIGO table
     Special_id1,Obs_date,Vertex1,Vertex2,Vertex3,Vertex4=Open_InputDatabase.getinputs(password)
-    Table_NAMES=[]
     #loop over each special ID
-    for x in range (0,1):#len(Special_id1)):
+    for x in range (0,len(Special_id1)):
         #import url and make a table
         url,z,TYPE=url_for_ISPY_SkyCoord.ISPY_ephemeris_inSkyCoord('JWST',Obs_date[x],Special_id1[x],Vertex1[x],Vertex2[x],Vertex3[x],Vertex4[x])
         #get table name and create a table for this Specific ID
@@ -92,6 +91,18 @@ def importDATA(password):
                                except:
                                     # Rollback in case there is any error
                                     db.rollback()
+                               #update Status in the input table to know if that line has been run already     
+                               sql11= "UPDATE INPUT_Table SET Status='UPDATED' where Special_id='{0}'".format(tab_col[16])
+                               #print (sql11)
+                               try:
+                                    # Execute the SQL command
+                                    cursor.execute(sql11)
+                                    # Commit your changes in the database
+                                    db.commit()
+                               except:
+                                    # Rollback in case there is any error
+                                    db.rollback()
+                                    
                                #loop over all the columns, take care for the empty data columns/rows   
                                for y in range(0,len(tab_col)-4):
                                    if y==0 or y==2 or y==3 or y==4:
@@ -108,6 +119,18 @@ def importDATA(password):
                                         try:
                                             # Execute the SQL command
                                             cursor.execute(sql1)
+                                            # Commit your changes in the database
+                                            db.commit()
+                                        except:
+                                            # Rollback in case there is any error
+                                            db.rollback()
+                                            
+                                        #update Status in the input table to know if that line has been run already     
+                                        sql11= "UPDATE INPUT_Table SET Status='UPDATED' where Special_id='{0}'".format(tab_col[16])
+                                        #print (sql11)
+                                        try:
+                                            # Execute the SQL command
+                                            cursor.execute(sql11)
                                             # Commit your changes in the database
                                             db.commit()
                                         except:
@@ -149,8 +172,20 @@ def importDATA(password):
                                 db.commit()
                             except:
                                 # Rollback in case there is any error
-                                db.rollback()    
-            
+                                db.rollback()  
+                                
+                   #update Status in the input table to know if that line has been run already     
+                   sql11= "UPDATE INPUT_Table SET Status='UPDATED' where Special_id='{0}'".format(tab_col[16])
+                   #print (sql11)
+                   try:
+                        # Execute the SQL command
+                        cursor.execute(sql11)
+                        # Commit your changes in the database
+                        db.commit()
+                   except:
+                        # Rollback in case there is any error
+                        db.rollback()
+                        
             #check if the number of rows in f and in MySQL is the same (so if all the data has been imported)            
             sql2 = "SELECT COUNT(*) FROM {0}".format(tab_col[16])
             
@@ -188,18 +223,19 @@ def importDATA(password):
                                     print('Not possible to delete the outdated data')
                    except:  
                        print ("Error: unable to fetch data to find the reason for not matching tables.")
+                   try:
+                       # Execute the SQL command
+                       cursor.execute(sql2)
+                       # Fetch all the rows in a list of lists.
+                       result2 = cursor.fetchone()
+                       # Now check fetched result
+                       if result2[0]==len(f):
+                           print ('For Special ID ',Special_id,': All the data have been recorded into the database.')
+                   except:
+                       print ('For Special ID ',Special_id,": Error: unable to fetch data")  
+           
             except:
                print ('For Special ID ',Special_id,": Error: unable to fetch data")
-            try:
-               # Execute the SQL command
-               cursor.execute(sql2)
-               # Fetch all the rows in a list of lists.
-               result2 = cursor.fetchone()
-               # Now check fetched result
-               if result2[0]==len(f):
-                   print ('For Special ID ',Special_id,': All the data have been recorded into the database.')
-            except:
-               print ('For Special ID ',Special_id,": Error: unable to fetch data")  
             # disconnect from server
-            db.close()
+            db.close()     
     return Special_id1
