@@ -9,29 +9,29 @@ Created on Thu Dec  7 15:18:20 2017
 import pymysql
 
 import url_for_ISPY_SkyCoord
-import ISPYtable
-import Create_table
-import OpenMIGOtable
+import Create_ISPYtable
+import Setup_table_inMYSQL_tofillin_data
+import Open_InputDatabase
 from astropy.table import Table
 import numpy.ma as ma
 
-def importDATA():
+def importDATA(password):
     #import input data from MIGO table
-    Special_id1,Obs_date,Vertex1,Vertex2,Vertex3,Vertex4=OpenMIGOtable.getinputs()
+    Special_id1,Obs_date,Vertex1,Vertex2,Vertex3,Vertex4=Open_InputDatabase.getinputs(password)
     Table_NAMES=[]
     #loop over each special ID
-    for x in range (0,len(Special_id1)):
+    for x in range (0,1):#len(Special_id1)):
         #import url and make a table
         url,z,TYPE=url_for_ISPY_SkyCoord.ISPY_ephemeris_inSkyCoord('JWST',Obs_date[x],Special_id1[x],Vertex1[x],Vertex2[x],Vertex3[x],Vertex4[x])
+        #get table name and create a table for this Specific ID
+        table_name=Setup_table_inMYSQL_tofillin_data.makeMySQLtable(Special_id1[x],password)
+        Special_id=table_name
         #check if there are any data on the website
         if z==None:
             k='No results'
         else:
             #get the table and the tablelines
-            distant,tablelines=ISPYtable.make_table(z,'SPK-ID','EXPLANATION',1,1)
-            #get table name and create a table for this Specific ID
-            table_name=Create_table.makeMySQLtable(Special_id1[x])
-            Special_id=table_name
+            distant,tablelines=Create_ISPYtable.make_table(z,'SPK-ID','EXPLANATION',1,1)
             #make the table into lines to put in the database
             f=Table.as_array(distant)
             
@@ -41,7 +41,7 @@ def importDATA():
                JPL_SPKID.append(f[x][0])
             
             # Open database connection
-            db = pymysql.connect("localhost","root","34GH2B." )
+            db = pymysql.connect("localhost","root",password)
             
             # prepare a cursor object using cursor() method and go to the right database
             cursor = db.cursor()
@@ -159,13 +159,11 @@ def importDATA():
                cursor.execute(sql2)
                # Fetch all the rows in a list of lists.
                result2 = cursor.fetchone()
-               #save table names
-               Table_NAMES.append(Special_id)
                # Now check fetched result
                if result2[0]==len(f):
                    print ('For Special ID ',Special_id,': All the data have been recorded into the database.')
                else: 
-                   print ('For Special ID ',Special_id,': The number of rows in the database is not the same as from ISPY')
+                   #print ('For Special ID ',Special_id,': The number of rows in the database is not the same as from ISPY')
                    #check why the sizes of tables do not match
                    sql5 ="SELECT {0} from {1}".format(tab_col[0],tab_col[16])
                    try:
@@ -173,26 +171,35 @@ def importDATA():
                        cursor.execute(sql5)
                        #Fetch all the rows in a list of lists. 
                        result5 = cursor.fetchall()
-                       if len(result5) > len(JPL_SPKID): 
-                           for x in range(0,len(result5)):
-                               #check if the asteroid already in the database
-                               if result5[x] in JPL_SPKID:
-                                   kl= 'In the database'
-                               else:
-                                   print ('The extra data in the database for JPL_SPKID:',result5[x][0])
-                       elif len(JPL_SPKID) > len(result5) :
-                          for x in range(0,len(JPL_SPKID)):
-                               #check if the asteroid already in the database
-                               if JPL_SPKID[x] in result5:
-                                   kl= 'In the database'
-                               else:
-                                   print ('The missing data in the database JPL_SPKID:',JPL_SPKID[x]) 
+                       for x in range(0,len(result5)):
+                           #check if the asteroid already in the database
+                           if result5[x] not in JPL_SPKID:
+                                # Prepare SQL query to DELETE required records
+                                sql6 = "DELETE FROM {0} WHERE {1}={2}".format(tab_col[16],tab_col[0],result5[x][0])
+                                #print (sql6)
+                                try:
+                                    # Execute the SQL command
+                                    cursor.execute(sql6)
+                                    # Commit your changes in the database
+                                    db.commit()
+                                except:
+                                    # Rollback in case there is any error
+                                    db.rollback()
+                                    print('Not possible to delete the outdated data')
                    except:  
                        print ("Error: unable to fetch data to find the reason for not matching tables.")
             except:
                print ('For Special ID ',Special_id,": Error: unable to fetch data")
-            
-            
+            try:
+               # Execute the SQL command
+               cursor.execute(sql2)
+               # Fetch all the rows in a list of lists.
+               result2 = cursor.fetchone()
+               # Now check fetched result
+               if result2[0]==len(f):
+                   print ('For Special ID ',Special_id,': All the data have been recorded into the database.')
+            except:
+               print ('For Special ID ',Special_id,": Error: unable to fetch data")  
             # disconnect from server
             db.close()
-    return Special_id1,Table_NAMES
+    return Special_id1

@@ -13,16 +13,16 @@ from astropy.coordinates import ICRS, Galactic, FK4, FK5
 from DateTime import Timezones, DateTime
 zones = set(Timezones())
 #could put inputs such as the database name and the Migo input table
-def getinputs(): 
+def getinputs(password): 
     # Open database connection
-    db = pymysql.connect("localhost","root","34GH2B." )
+    db = pymysql.connect("localhost","root",password )
     
     # prepare a cursor object using cursor() method
     cursor = db.cursor()
     cursor.execute("USE ISPY")
     
     # Create table as per requirement
-    sql = "SELECT * from MIGO_INP"
+    sql = "SELECT * from INPUT_Table"
     try:
        # Execute the SQL command
        cursor.execute(sql)

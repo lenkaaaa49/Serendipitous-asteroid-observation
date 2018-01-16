@@ -9,11 +9,11 @@ Created on Thu Dec  7 15:18:20 2017
 import pymysql
 
 #creates a table to put in the data from the website
-def makeMySQLtable(table_name):
+def makeMySQLtable(table_name,password):
     Special_id=table_name
     
     # Open database connection (host, user, password)
-    db = pymysql.connect("localhost","root","34GH2B." )
+    db = pymysql.connect("localhost","root",password )
     
     # prepare a cursor object using cursor() method
     cursor = db.cursor()

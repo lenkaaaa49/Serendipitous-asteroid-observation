@@ -7,9 +7,9 @@ Created on Tue Dec 19 16:23:52 2017
 """
 
 import pymysql
-import import_data
+import import_data_toMSQLtable
 
 #get all the names of the new made tables and run all the functions to 
 #create the database and tables
-Special_id,Table_names=import_data.importDATA()
-print ('Table names:',Table_names)
+Special_id=import_data_toMSQLtable.importDATA('34GH2B.')
+print ('Table names:',Special_id)
