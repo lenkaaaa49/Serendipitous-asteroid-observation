@@ -59,18 +59,6 @@ def makeMySQLtable(table_name,password):
     
     cursor.execute(sql)
     
-    #update Status in the input table to know if that line has been run already     
-    sql11= "UPDATE INPUT_Table SET Status='UPDATED' where Special_id='{0}'".format(tab_col[16])
-    #print (sql11)
-    try:
-        # Execute the SQL command
-        cursor.execute(sql11)
-        # Commit your changes in the database
-        db.commit()
-    except:
-        # Rollback in case there is any error
-        db.rollback()
-    
     # disconnect from server
     db.close()
     return table_name
