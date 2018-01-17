@@ -19,7 +19,7 @@ zones = set(Timezones())
 
 #def importDATA(password,Option,Older_than_date):
 password='34GH2B.'
-Option=3
+Option=2
 Older_than_date=DateTime('2018/01/17 12:20:00')
 #import input data from MIGO table
 Special_id1,Obs_date,Vertex1,Vertex2,Vertex3,Vertex4,Status,Updated_Date=Open_InputDatabase.getinputs(password)
@@ -28,6 +28,7 @@ db = pymysql.connect("localhost","root",password)
 # prepare a cursor object using cursor() method and go to the right database
 cursor = db.cursor()
 cursor.execute("USE ISPY")
+count=0
 
 #add new lines (new data)
 if Option==1:
@@ -154,14 +155,16 @@ if Option==1:
                
                 except:
                    print ('For Special ID ',Special_id,": Error: unable to fetch data")
-              
-                
+    if 'NULL' not in Status:
+        print('No new data to add')
+        
 #go over data older than xyDate and update them/add them
 elif Option==2:
     #loop over each special ID
     for ii in range (0,2):#len(Special_id1)):
         if Status[ii]=='UPDATED':
             if Updated_Date[ii]<Older_than_date:
+                print ('bla')
                 #import url and make a table
                 url,z,TYPE=url_for_ISPY_SkyCoord.ISPY_ephemeris_inSkyCoord('JWST',Obs_date[ii],Special_id1[ii],Vertex1[ii],Vertex2[ii],Vertex3[ii],Vertex4[ii])
                 #get table name and create a table for this Specific ID
@@ -356,8 +359,12 @@ elif Option==2:
                    
                     except:
                        print ('For Special ID ',Special_id,": Error: unable to fetch data")  
-                          
-    
+            else:
+                count=count+1
+                if count==len(Special_id1):
+                    print('No outdated tables')
+             
+#adds new data and updates all the outdated ones    
 elif Option==3:
     #loop over each special ID
     for ii in range (0,2):#len(Special_id1)):
@@ -555,8 +562,6 @@ elif Option==3:
             except:
                print ('For Special ID ',Special_id,": Error: unable to fetch data")
 
-    
-    
 else:
     print("Check your inputs")
 
