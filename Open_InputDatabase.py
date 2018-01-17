@@ -34,6 +34,8 @@ def getinputs(password):
     #save up data to specific strings, and change the class(Skycoord,Datetime,Quantity)
     Special_id=[]
     Obs_date=[]
+    Updated_Date=[]
+    Status=[]
     Vertex1=[]
     Vertex2=[]
     Vertex3=[]
@@ -42,6 +44,8 @@ def getinputs(password):
     for x in range(0,len(result)):   
         Special_id.append(result[x][0])
         Obs_date.append(DateTime(result[x][1]))
+        Status.append(result[x][11])
+        Updated_Date.append(DateTime(result[x][12]))
         Vertex1.append(SkyCoord(result[x][3],result[x][4]))
         if result[x][6]==None:
             Vertex2.append(u.Quantity(result[x][5]))
@@ -55,8 +59,8 @@ def getinputs(password):
             Vertex2.append(SkyCoord(result[x][5],result[x][6]))
             Vertex3.append(SkyCoord(result[x][7],result[x][8]))
             Vertex4.append(SkyCoord(result[x][9],result[x][10]))
-    
+    #print (Status, Updated_Date)
     # disconnect from server
     db.close()
     
-    return Special_id,Obs_date,Vertex1,Vertex2,Vertex3,Vertex4
+    return Special_id,Obs_date,Vertex1,Vertex2,Vertex3,Vertex4,Status,Updated_Date

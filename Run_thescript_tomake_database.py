@@ -11,5 +11,5 @@ import import_data_toMSQLtable
 
 #get all the names of the new made tables and run all the functions to 
 #create the database and tables
-Special_id=import_data_toMSQLtable.importDATA('34GH2B.')
+Special_id=import_data_toMSQLtable.importDATA('34GH2B.',1)
 print ('Table names:',Special_id)

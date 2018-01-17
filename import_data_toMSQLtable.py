@@ -17,9 +17,9 @@ import numpy.ma as ma
 
 def importDATA(password):
     #import input data from MIGO table
-    Special_id1,Obs_date,Vertex1,Vertex2,Vertex3,Vertex4=Open_InputDatabase.getinputs(password)
+    Special_id1,Obs_date,Vertex1,Vertex2,Vertex3,Vertex4,Status,Updated_Date=Open_InputDatabase.getinputs(password)
     #loop over each special ID
-    for x in range (0,len(Special_id1)):
+    for x in range (0,2):#len(Special_id1)):
         #import url and make a table
         url,z,TYPE=url_for_ISPY_SkyCoord.ISPY_ephemeris_inSkyCoord('JWST',Obs_date[x],Special_id1[x],Vertex1[x],Vertex2[x],Vertex3[x],Vertex4[x])
         #get table name and create a table for this Specific ID
