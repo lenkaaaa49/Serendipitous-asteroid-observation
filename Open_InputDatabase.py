@@ -40,25 +40,29 @@ def getinputs(password):
     Vertex2=[]
     Vertex3=[]
     Vertex4=[]
-    #depending on which data are in the tables
-    for x in range(0,len(result)):   
-        Special_id.append(result[x][0])
-        Obs_date.append(DateTime(result[x][1]))
-        Status.append(result[x][11])
-        Updated_Date.append(DateTime(result[x][12]))
-        Vertex1.append(SkyCoord(result[x][3],result[x][4]))
-        if result[x][6]==None:
-            Vertex2.append(u.Quantity(result[x][5]))
-            if result [x][7]==None:
-                Vertex3.append(None)
-                Vertex4.append(None)
+    try:
+        
+        #depending on which data are in the tables
+        for x in range(0,len(result)):   
+            Special_id.append(result[x][0])
+            Obs_date.append(DateTime(result[x][1]))
+            Status.append(result[x][11])
+            Updated_Date.append(DateTime(result[x][12]))
+            Vertex1.append(SkyCoord(result[x][3],result[x][4]))
+            if result[x][6]==None:
+                Vertex2.append(u.Quantity(result[x][5]))
+                if result [x][7]==None:
+                    Vertex3.append(None)
+                    Vertex4.append(None)
+                else:
+                    Vertex3.append(u.Quantity(result[x][7]))
+                    Vertex4.append(u.Quantity(result[x][9]))
             else:
-                Vertex3.append(u.Quantity(result[x][7]))
-                Vertex4.append(u.Quantity(result[x][9]))
-        else:
-            Vertex2.append(SkyCoord(result[x][5],result[x][6]))
-            Vertex3.append(SkyCoord(result[x][7],result[x][8]))
-            Vertex4.append(SkyCoord(result[x][9],result[x][10]))
+                Vertex2.append(SkyCoord(result[x][5],result[x][6]))
+                Vertex3.append(SkyCoord(result[x][7],result[x][8]))
+                Vertex4.append(SkyCoord(result[x][9],result[x][10]))
+    except:
+        print ('Check the data in the INPUT_Table')
     #print (Status, Updated_Date)
     # disconnect from server
     db.close()
