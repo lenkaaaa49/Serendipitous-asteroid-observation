@@ -8,9 +8,9 @@ Created on Wed Jan 17 15:19:49 2018
 
 import pymysql
 
-import url_for_ISPY_SkyCoord
-import Create_ISPYtable
-import Setup_table_inMYSQL_tofillin_data
+import Url_for_ISPY_SkyCoord
+import Create_ISPY_Table
+import Setup_Table_in_MySQL_to_Fill_in_Data
 from astropy.table import Table
 import numpy.ma as ma
 
@@ -21,9 +21,9 @@ def importing_data(Option,password,Obs_date,Special_id1,Vertex1,Vertex2,Vertex3,
     cursor = db.cursor()
     cursor.execute("USE ISPY")
     #import url and make a table
-    url,z,TYPE=url_for_ISPY_SkyCoord.ISPY_ephemeris_inSkyCoord('JWST',Obs_date,Special_id1,Vertex1,Vertex2,Vertex3,Vertex4)
+    url,z,TYPE=Url_for_ISPY_SkyCoord.ISPY_ephemeris_inSkyCoord('JWST',Obs_date,Special_id1,Vertex1,Vertex2,Vertex3,Vertex4)
     #get table name and create a table for this Specific ID
-    table_name=Setup_table_inMYSQL_tofillin_data.makeMySQLtable(Special_id1,password)
+    table_name=Setup_Table_in_MySQL_to_Fill_in_Data.makeMySQLtable(Special_id1,password)
     Special_id=table_name
     #check if there are any data on the website
     if z==None:
@@ -42,7 +42,7 @@ def importing_data(Option,password,Obs_date,Special_id1,Vertex1,Vertex2,Vertex3,
         
     else:
         #get the table and the tablelines
-        distant,tablelines=Create_ISPYtable.make_table(z,'SPK-ID','EXPLANATION',1,1)
+        distant,tablelines=Create_ISPY_Table.make_table(z,'SPK-ID','EXPLANATION',1,1)
         #make the table into lines to put in the database
         f=Table.as_array(distant)
         

@@ -7,7 +7,7 @@ Created on Wed Nov 29 16:33:42 2017
 """
 
 import urllib
-import checkforconnection
+import Check_for_Connection
 from astropy import units as u
 from astropy.coordinates import SkyCoord
 from astropy.coordinates import ICRS, Galactic, FK4, FK5  
@@ -138,7 +138,7 @@ def ISPY_ephemeris_inSkyCoord(IDnumber, date, Special_id, Vertex1=None, Vertex2=
         print ('Check your inputs')
     
     #check if the internet works
-    loop=checkforconnection.check_connection()
+    loop=Check_for_Connection.check_connection()
     
     #url-website
     #open the website
