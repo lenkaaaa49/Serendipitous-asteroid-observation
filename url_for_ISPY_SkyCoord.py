@@ -142,7 +142,7 @@ def ISPY_ephemeris_inSkyCoord(IDnumber, date, Special_id, Vertex1=None, Vertex2=
     
     #url-website
     #open the website
-    f = urllib.request.urlopen(url)
+    f = urllib.request.urlopen(url,timeout=600)#10min timeout
     z=f.read().decode('utf-8')
     
         
