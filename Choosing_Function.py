@@ -23,7 +23,7 @@ def choose_function(password,Option,Older_than_date=None):
         db.close() 
         try:
             #import input data from MIGO table
-            Special_id1,Obs_date,Vertex1,Vertex2,Vertex3,Vertex4,Status,Updated_Date=Open_Input_Database.getinputs(password)
+            Special_id1,Obs_date,Vertex1,Vertex2,Vertex3,Vertex4,Status,Updated_Date,Instrument,Mode=Open_Input_Database.getinputs(password)
             count=0
             
             #add new lines (new data)
@@ -31,7 +31,7 @@ def choose_function(password,Option,Older_than_date=None):
                 #loop over each special ID
                 for ii in range (0,len(Special_id1)):
                     if Status[ii]!='UPDATED':
-                        Special_ID=Importing_Data_into_MySQL.importing_data(Option,password,Obs_date[ii],Special_id1[ii],Vertex1[ii],Vertex2[ii],Vertex3[ii],Vertex4[ii])
+                        Special_ID,z=Importing_Data_into_MySQL.importing_data(Option,password,Obs_date[ii],Special_id1[ii],Vertex1[ii],Vertex2[ii],Vertex3[ii],Vertex4[ii],Instrument[ii],Mode[ii])
             
                 if 'NULL' not in Status:
                     print('No new data to add')
@@ -45,7 +45,7 @@ def choose_function(password,Option,Older_than_date=None):
                     for ii in range (0,len(Special_id1)):
                         if Status[ii]=='UPDATED':
                             if Updated_Date[ii]<Older_than_date:
-                                Special_ID=Importing_Data_into_MySQL.importing_data(Option,password,Obs_date[ii],Special_id1[ii],Vertex1[ii],Vertex2[ii],Vertex3[ii],Vertex4[ii])
+                                Special_ID=Importing_Data_into_MySQL.importing_data(Option,password,Obs_date[ii],Special_id1[ii],Vertex1[ii],Vertex2[ii],Vertex3[ii],Vertex4[ii],Instrument[ii],Mode[ii])
                             else:
                                 count=count+1
                                 if count==len(Special_id1):
@@ -55,7 +55,7 @@ def choose_function(password,Option,Older_than_date=None):
             elif Option==3:
                 #loop over each special ID
                 for ii in range (0,len(Special_id1)):
-                    Special_ID=Importing_Data_into_MySQL.importing_data(Option,password,Obs_date[ii],Special_id1[ii],Vertex1[ii],Vertex2[ii],Vertex3[ii],Vertex4[ii])
+                    Special_ID=Importing_Data_into_MySQL.importing_data(Option,password,Obs_date[ii],Special_id1[ii],Vertex1[ii],Vertex2[ii],Vertex3[ii],Vertex4[ii],Instrument[ii],Mode[ii])
                 if 'NULL' not in Status:
                     print('No new data to add')
                     
@@ -67,7 +67,7 @@ def choose_function(password,Option,Older_than_date=None):
                     #loop over each special ID
                     for ii in range (0,len(Special_id1)):
                         if Updated_Date[ii]<Older_than_date or Status[ii]=='NULL':
-                            Special_ID=Importing_Data_into_MySQL.importing_data(Option,password,Obs_date[ii],Special_id1[ii],Vertex1[ii],Vertex2[ii],Vertex3[ii],Vertex4[ii])
+                            Special_ID=Importing_Data_into_MySQL.importing_data(Option,password,Obs_date[ii],Special_id1[ii],Vertex1[ii],Vertex2[ii],Vertex3[ii],Vertex4[ii],Instrument[ii],Mode[ii])
                         else:
                             count=count+1
                             if count==len(Special_id1):

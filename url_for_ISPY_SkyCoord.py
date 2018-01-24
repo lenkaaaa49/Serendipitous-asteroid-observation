@@ -152,19 +152,19 @@ def ISPY_ephemeris_inSkyCoord(IDnumber, date, Special_id, Vertex1=None, Vertex2=
     for idx,line in enumerate(riadky): #number the lines
         if line.find('No cataloged asteroids were found in the specified field') > -1: #find the beginning line
             z=None    
-            print ('For Special ID ',Special_id,': No cataloged asteroids were found in the specified field.')
+            print ('For OBS ID ',Special_id,': No cataloged asteroids were found in the specified field.')
             break
             
 
         elif line.find('Unexpected Output') > -1: #find the beginning line
              print(line[82:len(line)])
-             print('For Special ID ',Special_id,': Check your inputs and try again')
+             print('For OBS ID ',Special_id,': Check your inputs and try again')
              z=None
         
         elif len(riadky)<=5:
             if line.find('Error') > -1: 
                 out=riadky[1].split('<')
-                print('For Special ID ',Special_id,out[0])
+                print('For OBS ID ',Special_id,out[0])
                 z=None
                 break
                 

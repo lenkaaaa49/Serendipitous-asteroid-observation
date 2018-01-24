@@ -34,6 +34,8 @@ def getinputs(password):
     #save up data to specific strings, and change the class(Skycoord,Datetime,Quantity)
     Special_id=[]
     Obs_date=[]
+    Instrument=[]
+    Mode=[]
     Updated_Date=[]
     Status=[]
     Vertex1=[]
@@ -46,25 +48,27 @@ def getinputs(password):
         for x in range(0,len(result)):   
             Special_id.append(result[x][0])
             Obs_date.append(DateTime(result[x][1]))
-            Status.append(result[x][11])
-            Updated_Date.append(DateTime(result[x][12]))
-            Vertex1.append(SkyCoord(result[x][3],result[x][4]))
-            if result[x][6]==None:
-                Vertex2.append(u.Quantity(result[x][5]))
-                if result [x][7]==None:
+            Instrument.append(result[x][2])
+            Mode.append(result[x][3])
+            Status.append(result[x][12])
+            Updated_Date.append(DateTime(result[x][14]))
+            Vertex1.append(SkyCoord(result[x][4],result[x][5]))
+            if result[x][7]==None:
+                Vertex2.append(u.Quantity(result[x][6]))
+                if result [x][8]==None:
                     Vertex3.append(None)
                     Vertex4.append(None)
                 else:
-                    Vertex3.append(u.Quantity(result[x][7]))
-                    Vertex4.append(u.Quantity(result[x][9]))
+                    Vertex3.append(u.Quantity(result[x][8]))
+                    Vertex4.append(u.Quantity(result[x][10]))
             else:
-                Vertex2.append(SkyCoord(result[x][5],result[x][6]))
-                Vertex3.append(SkyCoord(result[x][7],result[x][8]))
-                Vertex4.append(SkyCoord(result[x][9],result[x][10]))
+                Vertex2.append(SkyCoord(result[x][6],result[x][7]))
+                Vertex3.append(SkyCoord(result[x][8],result[x][9]))
+                Vertex4.append(SkyCoord(result[x][10],result[x][11]))
     except:
         print ('Check the data in the INPUT_Table')
     #print (Status, Updated_Date)
     # disconnect from server
     db.close()
     
-    return Special_id,Obs_date,Vertex1,Vertex2,Vertex3,Vertex4,Status,Updated_Date
+    return Special_id,Obs_date,Vertex1,Vertex2,Vertex3,Vertex4,Status,Updated_Date,Instrument,Mode
