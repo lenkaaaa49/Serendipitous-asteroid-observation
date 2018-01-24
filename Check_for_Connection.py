@@ -10,13 +10,15 @@ import urllib
 def check_connection():
     #print ("test 1")
     loop_value = 1
-    while loop_value == 1:
+    while loop_value < 50000:
         #print ("test 2")
         try:
             urllib.request.urlopen("http://google.com")
-            loop_value=0
+            loop_value=50000+1
+            print( "Network is running" )
         except urllib.error.URLError as e:
-            print("Network currently down")
-    else:
-        print( "Network is running" )
+            #print("Network currently down")
+            loop_value=loop_value+1
+            raise ValueError("Check your network connection")
+    
     return loop_value

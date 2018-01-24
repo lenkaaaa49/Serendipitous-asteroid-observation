@@ -33,7 +33,19 @@ def importing_data(password,Obs_date,Special_id1,Vertex1,Vertex2,Vertex3,Vertex4
        # Commit your changes in the database
        db.commit()
     except:
-       print ("Error: unable to delete data")
+       raise ValueError("Error: unable to delete data in the old table to update it")
+    #update the fact that the data has been deleted
+    sql11= "UPDATE INPUT_Table SET Status='NULL',Number_of_Asteroids_Detected=0, Time_Updated=NOW() where OBS_id='{0}'".format(Special_id)
+    try:
+        # Execute the SQL command
+        cursor.execute(sql11)
+        # Commit your changes in the database
+        db.commit()
+    except:
+        # Rollback in case there is any error
+        db.rollback()
+        raise ValueError("Unable to update the status for OBS_id:"+Special_id+"in the INPUT_Table.")
+ 
     #check if there are any data on the website
     if z==None:
         #No results
@@ -48,6 +60,7 @@ def importing_data(password,Obs_date,Special_id1,Vertex1,Vertex2,Vertex3,Vertex4
         except:
             # Rollback in case there is any error
             db.rollback()
+            raise ValueError("Unable to update the status for OBS_id:"+Special_id+"in the INPUT_Table.")
         
     else:
         #get the table and the tablelines
@@ -73,7 +86,6 @@ def importing_data(password,Obs_date,Special_id1,Vertex1,Vertex2,Vertex3,Vertex4
                               RA ,\
                               DEC1 ,Last_Updated)\
                    VALUES ('{2}',{1[0]},'{1[2]}','{1[3]}','{1[4]}',NOW())".format(tab_col[18],f[x],tab_col[20])
-           
            try:
                # Execute the SQL command
                cursor.execute(sql1)
@@ -82,6 +94,7 @@ def importing_data(password,Obs_date,Special_id1,Vertex1,Vertex2,Vertex3,Vertex4
            except:
                # Rollback in case there is any error
                db.rollback()
+               raise ValueError("Unable to import into table OBS_id:"+Special_id)
            #loop over all the columns  
            for y in range(0,len(tab_col)-6):
                if y==0 or y==2 or y==3 or y==4:
@@ -89,8 +102,11 @@ def importing_data(password,Obs_date,Special_id1,Vertex1,Vertex2,Vertex3,Vertex4
                elif ma.getmask(f[x][y])==True:
                     # Prepare SQL query to INSERT a record into the database.
                     sql1=0
+               elif f[x][y]=='NA':
+                    # Prepare SQL query to INSERT a record into the database.
+                    sql1=0
                else:
-                    sql1 = "UPDATE {0} SET {1}={2}\
+                    sql1 = "UPDATE {0} SET {1}='{2}'\
                     where {3}={4}".format(tab_col[18],tab_col[y],f[x][y],tab_col[0],f[x][0])
                     #print (x,y,f[x][y])
                     try:
@@ -101,6 +117,7 @@ def importing_data(password,Obs_date,Special_id1,Vertex1,Vertex2,Vertex3,Vertex4
                     except:
                         # Rollback in case there is any error
                         db.rollback()  
+                        raise ValueError("Unable to import into table OBS_id:"+Special_id)
                         
                         
         #check if the number of rows in f and in MySQL is the same (so if all the data has been imported)            
@@ -126,12 +143,13 @@ def importing_data(password,Obs_date,Special_id1,Vertex1,Vertex2,Vertex3,Vertex4
                except:
                     # Rollback in case there is any error
                     db.rollback()
+                    raise ValueError("Unable to update the status for OBS_id:"+Special_id+"in the INPUT_Table.")
            
            else: 
                print ('For OBS ID ',Special_id,': The number of rows in the database is not the same as from ISPY')
        
         except:
-           print ('For OBS ID ',Special_id,": Error: unable to fetch data")
+           raise ValueError('For OBS ID ',Special_id,": Error: unable to fetch data to check if all the data have been recorded into the database.")
     # disconnect from server
     db.close() 
     return Special_id1

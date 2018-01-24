@@ -23,6 +23,7 @@ zones = set(Timezones())
 #run the functions
 #Special_id=Different_Functions.create_new_tables('34GH2B.')
 #add new lines (new data) in the database
+
 #Special_id=Different_Functions.update_old_tables('34GH2B.',DateTime('2018/01/23 16:56:00'))
 #go over data older than xyDate and update them/add them
 

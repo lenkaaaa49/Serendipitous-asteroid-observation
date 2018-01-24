@@ -29,7 +29,8 @@ def getinputs(password):
        #Fetch all the rows in a list of lists.
        result = cursor.fetchall()
     except:
-       print ("Error: unable to fetch data")
+       #print ("Error: unable to fetch data")
+       raise ValueError("Error: unable to fetch data from INPUT_Table")
     
     #save up data to specific strings, and change the class(Skycoord,Datetime,Quantity)
     Special_id=[]
@@ -66,7 +67,7 @@ def getinputs(password):
                 Vertex3.append(SkyCoord(result[x][8],result[x][9]))
                 Vertex4.append(SkyCoord(result[x][10],result[x][11]))
     except:
-        print ('Check the data in the INPUT_Table')
+        raise ValueError('Error: Check the data in the INPUT_Table')
     #print (Status, Updated_Date)
     # disconnect from server
     db.close()

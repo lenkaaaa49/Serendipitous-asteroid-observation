@@ -142,8 +142,11 @@ def ISPY_ephemeris_inSkyCoord(IDnumber, date, Special_id, Vertex1=None, Vertex2=
     
     #url-website
     #open the website
-    f = urllib.request.urlopen(url,timeout=600)#10min timeout
-    z=f.read().decode('utf-8')
+    try:
+        f = urllib.request.urlopen(url,timeout=600)#10min timeout
+        z=f.read().decode('utf-8')
+    except:
+        raise ValueError("Too long to load the website. Check your network connection")
     
         
     riadky=z.split('\n')
@@ -157,16 +160,16 @@ def ISPY_ephemeris_inSkyCoord(IDnumber, date, Special_id, Vertex1=None, Vertex2=
             
 
         elif line.find('Unexpected Output') > -1: #find the beginning line
-             print(line[82:len(line)])
-             print('For OBS ID ',Special_id,': Check your inputs and try again')
-             z=None
+             err=(line[82:len(line)])
+             raise ValueError('For OBS ID: '+Special_id+': Check your inputs and try again'+err)
+             
         
         elif len(riadky)<=5:
             if line.find('Error') > -1: 
                 out=riadky[1].split('<')
-                print('For OBS ID ',Special_id,out[0])
-                z=None
+                raise ValueError('For OBS ID: '+Special_id,out[0])
                 break
+                
                 
     print ('Url for',Special_id,':',url)      
     return url,z,TYPE1

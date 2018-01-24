@@ -17,8 +17,6 @@ def makeMySQLtable(table_name,password,Obs_date,Vertex1,Vertex2,Vertex3,Vertex4,
     
     # prepare a cursor object using cursor() method
     cursor = db.cursor()
-    #create a database ISPY, if there isnt one like that already
-    cursor.execute("CREATE DATABASE IF NOT EXISTS ISPY") 
     #use the database
     cursor.execute("USE ISPY")
     
@@ -72,9 +70,10 @@ def makeMySQLtable(table_name,password,Obs_date,Vertex1,Vertex2,Vertex3,Vertex4,
                              tab_col[14],tab_col[15],tab_col[16],tab_col[17],
                              comment[0],comment[1],comment[2],comment[3],
                              comment[4],comment[5],comment[6])
-    #print (sql)
-    cursor.execute(sql)
-    
+    try:
+        cursor.execute(sql)
+    except:
+        raise ValueError("Not possible to create a table in MySQL to input data into. Check your command for MySQL.")
     # disconnect from server
     db.close()
     return table_name
