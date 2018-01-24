@@ -14,7 +14,7 @@ import Setup_Table_in_MySQL_to_Fill_in_Data
 from astropy.table import Table
 import numpy.ma as ma
 
-def importing_data(Option,password,Obs_date,Special_id1,Vertex1,Vertex2,Vertex3,Vertex4,Instrument,Mode):
+def importing_data(password,Obs_date,Special_id1,Vertex1,Vertex2,Vertex3,Vertex4,Instrument,Mode):
     # Open database connection
     db = pymysql.connect("localhost","root",password)
     # prepare a cursor object using cursor() method and go to the right database
@@ -134,4 +134,4 @@ def importing_data(Option,password,Obs_date,Special_id1,Vertex1,Vertex2,Vertex3,
            print ('For OBS ID ',Special_id,": Error: unable to fetch data")
     # disconnect from server
     db.close() 
-    return Special_id1,z
+    return Special_id1
