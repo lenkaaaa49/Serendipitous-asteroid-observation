@@ -143,7 +143,7 @@ def ISPY_ephemeris_inSkyCoord(IDnumber, date, Special_id, Vertex1=None, Vertex2=
     #url-website
     #open the website
     try:
-        f = urllib.request.urlopen(url,timeout=600)#10min timeout
+        f = urllib.request.urlopen(url,timeout=1200)#10min timeout
         z=f.read().decode('utf-8')
     except:
         raise ValueError("Too long to load the website. Check your network connection")
