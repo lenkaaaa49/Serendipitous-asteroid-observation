@@ -35,7 +35,7 @@ def importing_data(password,Obs_date,Special_id1,Vertex1,Vertex2,Vertex3,Vertex4
     except:
        raise ValueError("Error: unable to delete data in the old table to update it")
     #update the fact that the data has been deleted
-    sql11= "UPDATE INPUT_Table SET Status='NULL',Number_of_Asteroids_Detected=0, Time_Updated=NOW() where OBS_id='{0}'".format(Special_id)
+    sql11= "UPDATE INPUT_Table SET Status='NULL',Number_of_Asteroids_Detected=0, Time_Updated_System_timezone=NOW() where OBS_id='{0}'".format(Special_id)
     try:
         # Execute the SQL command
         cursor.execute(sql11)
@@ -44,13 +44,23 @@ def importing_data(password,Obs_date,Special_id1,Vertex1,Vertex2,Vertex3,Vertex4
     except:
         # Rollback in case there is any error
         db.rollback()
-        raise ValueError("Unable to update the status for OBS_id:"+Special_id+"in the INPUT_Table.")
- 
+        raise ValueError("Unable to update the status for OBS_id:"+Special_id+" in the INPUT_Table.")
+    
+#    #add the utc time
+#    sql2 = "SELECT Time_Updated_System_timezone FROM {0}".format(tab_col[18])
+#        
+#        try:
+#           # Execute the SQL command
+#           cursor.execute(sql2)
+#           # Fetch all the rows in a list of lists.
+#           result2 = cursor.fetchone()
+    
+    
     #check if there are any data on the website
     if z==None:
         #No results
         #update Status in the input table to know if that line has been run already     
-        sql11= "UPDATE INPUT_Table SET Status='UPDATED',Number_of_Asteroids_Detected=0, Time_Updated=NOW() where OBS_id='{0}'".format(Special_id)
+        sql11= "UPDATE INPUT_Table SET Status='UPDATED',Number_of_Asteroids_Detected=0, Time_Updated_System_timezone=NOW() where OBS_id='{0}'".format(Special_id)
         #print (sql11)
         try:
             # Execute the SQL command
@@ -86,6 +96,7 @@ def importing_data(password,Obs_date,Special_id1,Vertex1,Vertex2,Vertex3,Vertex4
                               RA ,\
                               DEC1 ,Last_Updated)\
                    VALUES ('{2}',{1[0]},'{1[2]}','{1[3]}','{1[4]}',NOW())".format(tab_col[18],f[x],tab_col[20])
+
            try:
                # Execute the SQL command
                cursor.execute(sql1)
@@ -133,7 +144,7 @@ def importing_data(password,Obs_date,Special_id1,Vertex1,Vertex2,Vertex3,Vertex4
                print ('For OBS ID ',Special_id,': All the data have been recorded into the database.')
                
                #update Status in the input table to know if that line has been run already     
-               sql11= "UPDATE INPUT_Table SET Status='UPDATED',Number_of_Asteroids_Detected={1}, Time_Updated=NOW() where OBS_id='{0}'".format(tab_col[18],result2[0])
+               sql11= "UPDATE INPUT_Table SET Status='UPDATED',Number_of_Asteroids_Detected={1}, Time_Updated_System_timezone=NOW() where OBS_id='{0}'".format(tab_col[18],result2[0])
                #print (sql11)
                try:
                     # Execute the SQL command
