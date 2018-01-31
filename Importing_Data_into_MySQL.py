@@ -146,7 +146,7 @@ def importing_data(password,Obs_date,Special_id1,Vertex1,Vertex2,Vertex3,Vertex4
                     raise ValueError("Unable to update the status for OBS_id:"+Special_id+"in the INPUT_Table.")
            
            else: 
-               print ('For OBS ID ',Special_id,': The number of rows in the database is not the same as from ISPY')
+               print ('For OBS ID ',Special_id,': The number of asteroids in the database is not the same as from ISPY')
        
         except:
            raise ValueError('For OBS ID ',Special_id,": Error: unable to fetch data to check if all the data have been recorded into the database.")

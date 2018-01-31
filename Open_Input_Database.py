@@ -46,30 +46,30 @@ def getinputs(password):
     try:
         
         #depending on which data are in the tables
-        for x in range(0,len(result)):   
-            Special_id.append(result[x][0])
-            Obs_date.append(DateTime(result[x][1]))
-            Instrument.append(result[x][2])
-            Mode.append(result[x][3])
-            Status.append(result[x][12])
-            Updated_Date.append(DateTime(result[x][14]))
-            Vertex1.append(SkyCoord(result[x][4],result[x][5]))
-            if result[x][7]==None:
-                Vertex2.append(u.Quantity(result[x][6]))
-                if result [x][8]==None:
+        for line in result:   
+            Special_id.append(line[0])
+            Obs_date.append(DateTime(line[1]))
+            Instrument.append(line[2])
+            Mode.append(line[3])
+            Status.append(line[12])
+            Updated_Date.append(DateTime(line[14]))
+            Vertex1.append(SkyCoord(line[4],line[5]))
+            if line[7]==None:
+                Vertex2.append(u.Quantity(line[6]))
+                if line[8]==None:
                     Vertex3.append(None)
                     Vertex4.append(None)
                 else:
-                    Vertex3.append(u.Quantity(result[x][8]))
-                    Vertex4.append(u.Quantity(result[x][10]))
+                    Vertex3.append(u.Quantity(line[8]))
+                    Vertex4.append(u.Quantity(line[10]))
             else:
-                Vertex2.append(SkyCoord(result[x][6],result[x][7]))
-                Vertex3.append(SkyCoord(result[x][8],result[x][9]))
-                Vertex4.append(SkyCoord(result[x][10],result[x][11]))
+                Vertex2.append(SkyCoord(line[6],line[7]))
+                Vertex3.append(SkyCoord(line[8],line[9]))
+                Vertex4.append(SkyCoord(line[10],line[11]))
     except:
-        raise ValueError('Error: Check the data in the INPUT_Table')
+        raise ValueError('Error: Check the data in the INPUT_Table. Offending line:'+str(line))
     #print (Status, Updated_Date)
     # disconnect from server
     db.close()
-    
+        
     return Special_id,Obs_date,Vertex1,Vertex2,Vertex3,Vertex4,Status,Updated_Date,Instrument,Mode

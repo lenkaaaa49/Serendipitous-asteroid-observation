@@ -143,7 +143,7 @@ def ISPY_ephemeris_inSkyCoord(IDnumber, date, Special_id, Vertex1=None, Vertex2=
     #url-website
     #open the website
     try:
-        f = urllib.request.urlopen(url,timeout=1200)#10min timeout
+        f = urllib.request.urlopen(url,timeout=1200)#20min timeout according to (https://ssd.jpl.nasa.gov/x/ispy.html) it can take up to 20 minutes
         z=f.read().decode('utf-8')
     except:
         raise ValueError("Too long to load the website. Check your network connection")

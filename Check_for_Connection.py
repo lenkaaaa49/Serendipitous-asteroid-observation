@@ -19,6 +19,6 @@ def check_connection():
         except urllib.error.URLError as e:
             #print("Network currently down")
             loop_value=loop_value+1
-            raise ValueError("Check your network connection")
+            raise ValueError("There appears to be no network connection")
     
     return loop_value
