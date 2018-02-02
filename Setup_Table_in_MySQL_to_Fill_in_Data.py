@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Thu Dec  7 15:18:20 2017
-
 @author: lenka
 """
 
@@ -56,7 +55,6 @@ def makeMySQLtable(table_name,password,Obs_date,Vertex1,Vertex2,Vertex3,Vertex4,
                              {16} DEC(4,1),\
                              {17} VARCHAR(30),\
                              {18} VARCHAR(30),\
-                             {19} TIMESTAMP,\
                              FOREIGN KEY (OBS_id)\
                              REFERENCES INPUT_Table(OBS_id)\
                              ON DELETE CASCADE\

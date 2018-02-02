@@ -21,13 +21,13 @@ zones = set(Timezones())
 #print ('Table names:',Special_id)
 
 #run the functions
-#Special_id=Different_Functions.create_new_tables('34GH2B.')
+Special_id=Different_Functions.create_new_tables('34GH2B.')
 #add new lines (new data) in the database
 
-#Special_id=Different_Functions.update_old_tables('34GH2B.',DateTime('2018/01/23 16:56:00'))
+#Special_id=Different_Functions.update_old_tables('34GH2B.',DateTime('2018/02/02 10:37:00 UTC'))
 #go over data older than xyDate and update them/add them
 
-Special_id=Different_Functions.add_and_update_tables('34GH2B.')
+#Special_id=Different_Functions.add_and_update_tables('34GH2B.')
 #adds new data and updates all the outdated ones 
 
 #Special_id=Different_Functions.add_and_update_tables_after_date('34GH2B.',DateTime('2018/01/23 16:56:00'))

@@ -13,6 +13,7 @@ import Create_ISPY_Table
 import Setup_Table_in_MySQL_to_Fill_in_Data
 from astropy.table import Table
 import numpy.ma as ma
+from time import gmtime, strftime
 
 def importing_data(password,Obs_date,Special_id1,Vertex1,Vertex2,Vertex3,Vertex4,Instrument,Mode):
     # Open database connection
@@ -35,7 +36,8 @@ def importing_data(password,Obs_date,Special_id1,Vertex1,Vertex2,Vertex3,Vertex4
     except:
        raise ValueError("Error: unable to delete data in the old table to update it")
     #update the fact that the data has been deleted
-    sql11= "UPDATE INPUT_Table SET Status='NULL',Number_of_Asteroids_Detected=0, Time_Updated_System_timezone=NOW() where OBS_id='{0}'".format(Special_id)
+    time1=strftime("%Y-%m-%d %H:%M:%S", gmtime())+ ' UTC'
+    sql11= "UPDATE INPUT_Table SET Status='NULL',Number_of_Asteroids_Detected=0, Time_Updated_UTC='{0}' where OBS_id='{1}'".format(time1,Special_id)
     try:
         # Execute the SQL command
         cursor.execute(sql11)
@@ -46,21 +48,12 @@ def importing_data(password,Obs_date,Special_id1,Vertex1,Vertex2,Vertex3,Vertex4
         db.rollback()
         raise ValueError("Unable to update the status for OBS_id:"+Special_id+" in the INPUT_Table.")
     
-#    #add the utc time
-#    sql2 = "SELECT Time_Updated_System_timezone FROM {0}".format(tab_col[18])
-#        
-#        try:
-#           # Execute the SQL command
-#           cursor.execute(sql2)
-#           # Fetch all the rows in a list of lists.
-#           result2 = cursor.fetchone()
-    
-    
     #check if there are any data on the website
     if z==None:
         #No results
-        #update Status in the input table to know if that line has been run already     
-        sql11= "UPDATE INPUT_Table SET Status='UPDATED',Number_of_Asteroids_Detected=0, Time_Updated_System_timezone=NOW() where OBS_id='{0}'".format(Special_id)
+        #update Status in the input table to know if that line has been run already   
+        time1=strftime("%Y-%m-%d %H:%M:%S", gmtime())+ ' UTC'
+        sql11= "UPDATE INPUT_Table SET Status='UPDATED',Number_of_Asteroids_Detected=0, Time_Updated_UTC='{0}' where OBS_id='{1}'".format(time1,Special_id)
         #print (sql11)
         try:
             # Execute the SQL command
@@ -94,9 +87,8 @@ def importing_data(password,Obs_date,Special_id1,Vertex1,Vertex2,Vertex3,Vertex4
            #input new data
            sql1 = "INSERT INTO {0}(OBS_id,JPL_SPKID,Name_designation,\
                               RA ,\
-                              DEC1 ,Last_Updated)\
-                   VALUES ('{2}',{1[0]},'{1[2]}','{1[3]}','{1[4]}',NOW())".format(tab_col[18],f[x],tab_col[20])
-
+                              DEC1) \
+                   VALUES ('{2}',{1[0]},'{1[2]}','{1[3]}','{1[4]}')".format(tab_col[18],f[x],tab_col[20])
            try:
                # Execute the SQL command
                cursor.execute(sql1)
@@ -143,8 +135,9 @@ def importing_data(password,Obs_date,Special_id1,Vertex1,Vertex2,Vertex3,Vertex4
            if result2[0]==len(f):
                print ('For OBS ID ',Special_id,': All the data have been recorded into the database.')
                
-               #update Status in the input table to know if that line has been run already     
-               sql11= "UPDATE INPUT_Table SET Status='UPDATED',Number_of_Asteroids_Detected={1}, Time_Updated_System_timezone=NOW() where OBS_id='{0}'".format(tab_col[18],result2[0])
+               #update Status in the input table to know if that line has been run already 
+               time1=strftime("%Y-%m-%d %H:%M:%S", gmtime())+ ' UTC'
+               sql11= "UPDATE INPUT_Table SET Status='UPDATED',Number_of_Asteroids_Detected={1}, Time_Updated_UTC='{2}' where OBS_id='{0}'".format(tab_col[18],result2[0],time1)
                #print (sql11)
                try:
                     # Execute the SQL command

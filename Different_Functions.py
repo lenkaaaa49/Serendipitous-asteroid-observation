@@ -21,8 +21,6 @@ def create_new_tables(password):
         try:
             # prepare a cursor object using cursor() method
             cursor = db.cursor()
-            #set UTC time (zulu)
-            cursor.execute("SET @@session.time_zone='+00:00'")
             try:
                 #use the database
                 cursor.execute("USE ISPY")
@@ -58,8 +56,6 @@ def update_old_tables(password,Older_than_date):
         try:
             # prepare a cursor object using cursor() method
             cursor = db.cursor()
-            #set UTC time (zulu)
-            cursor.execute("SET @@session.time_zone='+00:00'")
             try:
                 #use the database
                 cursor.execute("USE ISPY")
@@ -102,8 +98,6 @@ def add_and_update_tables(password):
         try:
             # prepare a cursor object using cursor() method
             cursor = db.cursor()
-            #set UTC time (zulu)
-            cursor.execute("SET @@session.time_zone='+00:00'")
             try:
                 #use the database
                 cursor.execute("USE ISPY")
@@ -141,8 +135,6 @@ def add_and_update_tables_after_date(password,Older_than_date):
         try:
             # prepare a cursor object using cursor() method
             cursor = db.cursor()
-            #set UTC time (zulu)
-            cursor.execute("SET @@session.time_zone='+00:00'")
             try:
                 #use the database
                 cursor.execute("USE ISPY")
