@@ -9,23 +9,7 @@ import numpy as np
 from astropy.table import Table
 import matplotlib.pyplot as plt
 from scipy import interpolate
-import callhorizons
-import pandas as pd
 import astropy.units as u
-
-#This gives flux at 3.6 micron (the wavelength of a particular instrument I was interested in at the time):
-
-#michaelm@lin-migo-1:~/__work/IDL/migo/neatmfit$ more mjy36.pro
-# 3.6-micron flux (mJy) corresponding to V mag
-# Based on Wehrli (1985) giving 5.54e16 mJy, at V=-26.74
-# Confirmed (5.5464) by Gueymard, C.A. (2004), Solar Energy 76, 423--453
-# Note: Encyclopedia Britannica has -26.75 for V_Sun
-#function meno, inputs
-#function mjy36, V, relative_reflectance
-#  if n_elements(relative_reflectance) EQ 0 then $
-#    relative_reflectance = 1.
-#  return, relative_reflectance*5.5464e16* 10^(-(V+26.74)/2.5)
-#end
 
 def Reflectance(relative_reflectance,V,wav):
     #wav=[10,20,25] #micron
@@ -44,6 +28,7 @@ def Reflectance(relative_reflectance,V,wav):
     for x in range(1,len(solar_flux_density)):
         wavelenght.append((float(solar_flux_density[x][0])))#/299792458)*10**(29)) #mJy
         solar_flux.append(float(solar_flux_density[x][1]))
+    
     #interpolate the values
     s = interpolate.InterpolatedUnivariateSpline(wavelenght, solar_flux)
     xnew = np.arange(0.1998,30,0.0001)
@@ -55,6 +40,7 @@ def Reflectance(relative_reflectance,V,wav):
     #    plt.legend(['Linear', 'InterpolatedUnivariateSpline'])
     #    plt.title('InterpolatedUnivariateSpline')
     #    plt.show()  
+    
     V_sun=[]
     reflectance=[]
     try:
@@ -63,21 +49,10 @@ def Reflectance(relative_reflectance,V,wav):
                  #find the value of solar flux density wanted at a specified micron value
                  wavelenght_wanted=np.where(xnew.astype('float32') == wav[xx])
                  V_sun.append(ynew[wavelenght_wanted[0][0]])
-                 #print ('V', V_sun)
-         
-    #    #convert the date in Julian days
-    #    dt = pd.DatetimeIndex(['2017/03/09 13:45:00 UTC'], dtype='datetime64[ns]', name=u'date', freq=None)
-    #    j = dt.to_julian_date()
-    #    #call horizons and get the needed data to calculate brightness
-    #    eros = callhorizons.query('Ceres')
-    #    eros.set_discreteepochs([j[0]])
-    #    eros.get_ephemerides('@JWST') 
-    #    V=eros['V'][0]
-        
-                 #V_sun=5.54e16
+                 
                  #calculate the reflectence
                  reflectance.append(relative_reflectance*V_sun[xx]*10**(-(V+26.74)/2.5))
-                 #print ('ref', reflectance)
+               
         except:
              #find the value of solar flux density wanted at a specified micron value
              wavelenght_wanted=np.where(xnew.astype('float32') == wav)
@@ -87,7 +62,6 @@ def Reflectance(relative_reflectance,V,wav):
              reflectance=relative_reflectance*V_sun*10**(-(V+26.74)/2.5)
     except:
         reflectance=[]
-        print ('bla')
         
     return reflectance
 
