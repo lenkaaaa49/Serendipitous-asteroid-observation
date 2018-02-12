@@ -11,7 +11,7 @@ import Open_Input_Database
 import Importing_Data_into_MySQL
 
 
-def create_new_tables(password):
+def create_new_tables(password,lambdaMu,eta,pv,relative_reflectance):
 #add new lines (new data) in the database
     Special_id1=[]
     try:
@@ -35,7 +35,7 @@ def create_new_tables(password):
             #loop over each special ID
             for ii in range (0,len(Special_id1)):
                 if Status[ii]!='UPDATED':
-                    Special_ID=Importing_Data_into_MySQL.importing_data(password,Obs_date[ii],Special_id1[ii],Vertex1[ii],Vertex2[ii],Vertex3[ii],Vertex4[ii],Instrument[ii],Mode[ii])
+                    Special_ID=Importing_Data_into_MySQL.importing_data(password,Obs_date[ii],Special_id1[ii],Vertex1[ii],Vertex2[ii],Vertex3[ii],Vertex4[ii],Instrument[ii],Mode[ii],lambdaMu,eta,pv,relative_reflectance)
         
             if 'NULL' not in Status:
                 print('No new data to add')
@@ -46,7 +46,7 @@ def create_new_tables(password):
         print ('Check your inputs (password)')
     return Special_id1
                     
-def update_old_tables(password,Older_than_date):
+def update_old_tables(password,Older_than_date,lambdaMu,eta,pv,relative_reflectance):
 #go over data older than xyDate and update them/add them
     Special_id1=[]
     try:
@@ -75,7 +75,7 @@ def update_old_tables(password,Older_than_date):
                 for ii in range (0,len(Special_id1)):
                     if Status[ii]=='UPDATED':
                         if Updated_Date[ii]<Older_than_date:
-                            Special_ID=Importing_Data_into_MySQL.importing_data(password,Obs_date[ii],Special_id1[ii],Vertex1[ii],Vertex2[ii],Vertex3[ii],Vertex4[ii],Instrument[ii],Mode[ii])
+                            Special_ID=Importing_Data_into_MySQL.importing_data(password,Obs_date[ii],Special_id1[ii],Vertex1[ii],Vertex2[ii],Vertex3[ii],Vertex4[ii],Instrument[ii],Mode[ii],lambdaMu,eta,pv,relative_reflectance)
                         else:
                             count=count+1
                             if count==len(Special_id1):
@@ -88,7 +88,7 @@ def update_old_tables(password,Older_than_date):
       
     return Special_id1            
             
-def add_and_update_tables(password):
+def add_and_update_tables(password,lambdaMu,eta,pv,relative_reflectance):
 #adds new data and updates all the outdated ones 
     Special_id1=[]
     try:
@@ -112,7 +112,7 @@ def add_and_update_tables(password):
 
             #loop over each special ID
             for ii in range (0,len(Special_id1)):
-                Special_ID=Importing_Data_into_MySQL.importing_data(password,Obs_date[ii],Special_id1[ii],Vertex1[ii],Vertex2[ii],Vertex3[ii],Vertex4[ii],Instrument[ii],Mode[ii])
+                Special_ID=Importing_Data_into_MySQL.importing_data(password,Obs_date[ii],Special_id1[ii],Vertex1[ii],Vertex2[ii],Vertex3[ii],Vertex4[ii],Instrument[ii],Mode[ii],lambdaMu,eta,pv,relative_reflectance)
             if 'NULL' not in Status:
                 print('No new data to add')
                     
@@ -125,7 +125,7 @@ def add_and_update_tables(password):
       
     return Special_id1
                     
-def add_and_update_tables_after_date(password,Older_than_date):     
+def add_and_update_tables_after_date(password,Older_than_date,lambdaMu,eta,pv,relative_reflectance):     
 #adds new data and go over data older than xyDate and update them/add them
     Special_id1=[]
     try:
@@ -153,7 +153,7 @@ def add_and_update_tables_after_date(password,Older_than_date):
                 #loop over each special ID
                 for ii in range (0,len(Special_id1)):
                     if Updated_Date[ii]<Older_than_date or Status[ii]=='NULL':
-                        Special_ID=Importing_Data_into_MySQL.importing_data(password,Obs_date[ii],Special_id1[ii],Vertex1[ii],Vertex2[ii],Vertex3[ii],Vertex4[ii],Instrument[ii],Mode[ii])
+                        Special_ID=Importing_Data_into_MySQL.importing_data(password,Obs_date[ii],Special_id1[ii],Vertex1[ii],Vertex2[ii],Vertex3[ii],Vertex4[ii],Instrument[ii],Mode[ii],lambdaMu,eta,pv,relative_reflectance)
                     else:
                         count=count+1
                         if count==len(Special_id1):
