@@ -3,6 +3,8 @@
 # Output will be in mJy (default) or W/m^2/micron.
 # LambdaMu can be an array (iterable) or a scalar Quantity;
 # output will be a list of Quantitites or a single Quantity, resp.
+#
+# Copied from https://github.com/MigoMueller/NEATM
 
 from __future__ import print_function
 
