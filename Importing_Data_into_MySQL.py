@@ -101,8 +101,10 @@ def importing_data(password,Obs_date,Special_id1,Vertex1,Vertex2,Vertex3,Vertex4
            asteroid=str(f[x][2]).strip("(")
            asteroid=str(asteroid).strip(")")
            horizons,V=Calculate_Brightness.calculate_brightness(lambdaMu,eta,pv,Obs_date,f[x][2])
+          
            #get the reflectance brightness
            reflectance=Ref_Brightness.Reflectance(relative_reflectance,V,lambdaMu)
+           
            
            #add brightness values together
            Brightness=[]
@@ -111,13 +113,14 @@ def importing_data(password,Obs_date,Special_id1,Vertex1,Vertex2,Vertex3,Vertex4
                    Brightness='empty'
                else:
                    for xx in range(0,len(reflectance)):
-                       Brightness.append(horizons[7][xx]+reflectance[xx]*u.mJy)
+                       Brightness.append(horizons[7][xx]+reflectance[xx])
+
            except: 
                if horizons[7]==[]:
                    Brightness='empty'
                else:
-                   Brightness=horizons[7]+reflectance*u.mJy
-           #print (Brightness)
+                   Brightness=horizons[7]+reflectance
+
     
            #input new data
            sql1 = "INSERT INTO {0}(OBS_id,JPL_SPKID,Name_designation,\
@@ -180,7 +183,7 @@ def importing_data(password,Obs_date,Special_id1,Vertex1,Vertex2,Vertex3,Vertex4
                     
                     else:
                         #add values for brightness 
-                        sql4 = "UPDATE {0} SET {1}='{2}'\
+                        sql4 = "UPDATE {0} SET `{1}`='{2}'\
                         where {3}={4}".format(tab_col[18],brightness[lam],Brightness[lam],tab_col[0],f[x][0])
                         #print (sql4)
                         try:
@@ -197,7 +200,7 @@ def importing_data(password,Obs_date,Special_id1,Vertex1,Vertex2,Vertex3,Vertex4
                         sql4="Not possible to calculate brightness"
                else:
                     #add values for brightness 
-                    sql4 = "UPDATE {0} SET {1}='{2}'\
+                    sql4 = "UPDATE {0} SET `{1}`='{2}'\
                         where {3}={4}".format(tab_col[18],brightness[0],Brightness,tab_col[0],f[x][0])
                     #print (sql4)
                     try:

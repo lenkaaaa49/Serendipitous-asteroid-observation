@@ -9,12 +9,11 @@ import numpy as np
 from astropy.table import Table
 import matplotlib.pyplot as plt
 from scipy import interpolate
+import callhorizons
+import pandas as pd
 import astropy.units as u
 
 def Reflectance(relative_reflectance,V,wav):
-    #wav=[10,20,25] #micron
-    #relative_reflectance=1.4
-    #V=2.3
         
     #read the table of the values
     solar_flux_density=Table.read('Rieke2008.fluxSunVega.txt', guess=False,format='ascii.fixed_width',  delimiter=' ',
@@ -26,9 +25,9 @@ def Reflectance(relative_reflectance,V,wav):
     wavelenght=[]
     solar_flux=[]
     for x in range(1,len(solar_flux_density)):
-        wavelenght.append((float(solar_flux_density[x][0])))#/299792458)*10**(29)) #mJy
+        wavelenght.append((float(solar_flux_density[x][0])))
         solar_flux.append(float(solar_flux_density[x][1]))
-    
+        
     #interpolate the values
     s = interpolate.InterpolatedUnivariateSpline(wavelenght, solar_flux)
     xnew = np.arange(0.1998,30,0.0001)
@@ -41,27 +40,31 @@ def Reflectance(relative_reflectance,V,wav):
     #    plt.title('InterpolatedUnivariateSpline')
     #    plt.show()  
     
+    V_sun1=[]
     V_sun=[]
     reflectance=[]
     try:
         try:
              for xx in range(0,len(wav)):
                  #find the value of solar flux density wanted at a specified micron value
-                 wavelenght_wanted=np.where(xnew.astype('float32') == wav[xx])
-                 V_sun.append(ynew[wavelenght_wanted[0][0]])
-                 
+                 wavelenght_wanted=np.where(xnew.astype('float32') == round(wav[xx], 4))
+                 V_sun1.append(ynew[wavelenght_wanted[0][0]])
+                 #convert to mJy
+                 V_sun.append((V_sun1[xx]*u.W/u.m**2/u.nm).to(u.mJy, equivalencies=u.spectral_density(wav[xx] * u.micron)))
                  #calculate the reflectence
                  reflectance.append(relative_reflectance*V_sun[xx]*10**(-(V+26.74)/2.5))
-               
+                 #print ('ref', reflectance)
         except:
              #find the value of solar flux density wanted at a specified micron value
-             wavelenght_wanted=np.where(xnew.astype('float32') == wav)
-             V_sun=ynew[wavelenght_wanted[0][0]]
-             V_sun=5.54e16
+             wavelenght_wanted=np.where(xnew.astype('float32') == round(wav, 4))
+             V_sun1=ynew[wavelenght_wanted[0][0]]
+             #convert to mJy
+             V_sun=(V_sun1*u.W/u.m**2/u.nm).to(u.mJy, equivalencies=u.spectral_density(wav* u.micron))
              #calculate the reflectence
              reflectance=relative_reflectance*V_sun*10**(-(V+26.74)/2.5)
     except:
-        reflectance=[]
+        reflectance=[] 
+        
         
     return reflectance
 

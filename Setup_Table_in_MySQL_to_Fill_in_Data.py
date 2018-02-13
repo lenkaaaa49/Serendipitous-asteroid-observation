@@ -93,7 +93,7 @@ def makeMySQLtable(table_name,password,Obs_date,Vertex1,Vertex2,Vertex3,Vertex4,
         for lam in range(0,len(LambdaMu)):
             brightness.append('Brightness_'+'{0}'.format(LambdaMu[lam])+'Micron')
             #add the needed number of columns for brightness
-            sql1="ALTER TABLE {0} ADD {1} VARCHAR(60)".format(tab_col[18],brightness[lam])
+            sql1="ALTER TABLE {0} ADD `{1}` VARCHAR(60)".format(tab_col[18],brightness[lam])
             try:
                 cursor.execute(sql1)
             except:
@@ -101,7 +101,7 @@ def makeMySQLtable(table_name,password,Obs_date,Vertex1,Vertex2,Vertex3,Vertex4,
     except:
         brightness.append('Brightness_'+'{0}'.format(LambdaMu)+'Micron')
         #add the needed number of columns for brightness
-        sql1="ALTER TABLE {0} ADD {1} VARCHAR(60)".format(tab_col[18],brightness[0])
+        sql1="ALTER TABLE {0} ADD `{1}` VARCHAR(60)".format(tab_col[18],brightness[0])
         try:
             cursor.execute(sql1)
         except:

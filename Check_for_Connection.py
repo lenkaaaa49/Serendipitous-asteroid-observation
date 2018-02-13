@@ -13,6 +13,7 @@ def check_connection():
     while loop_value < 50000:
         #print ("test 2")
         try:
+            #try to open google
             urllib.request.urlopen("http://google.com")
             loop_value=50000+1
             print( "Network is running" )

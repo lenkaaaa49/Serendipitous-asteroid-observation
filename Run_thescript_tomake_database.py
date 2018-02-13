@@ -11,7 +11,7 @@ import Different_Functions
 from DateTime import Timezones, DateTime
 zones = set(Timezones())
 
-lambdaMu=10 #wavelenghts until 29.999
+lambdaMu=[3.6,15,20]#wavelenghts until 29.9999 and only 4 decimal points
 eta=1.3
 pv=0.2
 relative_reflectance=1.4
