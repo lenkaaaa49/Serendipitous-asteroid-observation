@@ -4,7 +4,6 @@
 # LambdaMu can be an array (iterable) or a scalar Quantity;
 # output will be a list of Quantitites or a single Quantity, resp.
 
-from __future__ import print_function
 
 def neatm(h,g,alpha,r,delta,lambdaMu,eta,pv, mJy=True):
     import subprocess
