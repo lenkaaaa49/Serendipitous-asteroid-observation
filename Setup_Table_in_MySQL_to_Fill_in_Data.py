@@ -8,11 +8,11 @@ Created on Thu Dec  7 15:18:20 2017
 import pymysql
 
 #creates a table to put in the data from the website
-def makeMySQLtable(table_name,password,Obs_date,Vertex1,Vertex2,Vertex3,Vertex4,Instrument,Mode,LambdaMu):
+def makeMySQLtable(table_name,password,user,Obs_date,Vertex1,Vertex2,Vertex3,Vertex4,Instrument,Mode,LambdaMu):
     Special_id=table_name
     
     # Open database connection (host, user, password)
-    db = pymysql.connect("localhost","root",password)
+    db = pymysql.connect("localhost","{0}".format(user),"{0}".format(password))
     
     # prepare a cursor object using cursor() method
     cursor = db.cursor()
@@ -26,7 +26,7 @@ def makeMySQLtable(table_name,password,Obs_date,Vertex1,Vertex2,Vertex3,Vertex4,
              'dRAcosD', 'dDEC_by_dt', 'CntDst', 'PsAng', 'Data_Arc', 'Nobs', 
              'SMAA_3sig', 'SMIA_3sig', 'Theta', 'Pixel_x', 'Pixel_y', 'Last_updated',
              table_name,'OBS_id',Special_id, 'H','G','alpha','r','delta',
-             'eta','pv']
+             'eta','pv','Relative_reflectance']
     #set up the comemnt for the table
     Obs_date = str(Obs_date).strip().replace(" ", "_")
     Vertex1 = str(Vertex1).strip().replace(" ", "_")
@@ -65,6 +65,7 @@ def makeMySQLtable(table_name,password,Obs_date,Vertex1,Vertex2,Vertex3,Vertex4,
                              {23} VARCHAR(30),\
                              {24} VARCHAR(30),\
                              {25} VARCHAR(30),\
+                             {26} VARCHAR(30),\
                              FOREIGN KEY (OBS_id)\
                              REFERENCES INPUT_Table(OBS_id)\
                              ON DELETE CASCADE\
@@ -77,7 +78,7 @@ def makeMySQLtable(table_name,password,Obs_date,Vertex1,Vertex2,Vertex3,Vertex4,
                              tab_col[10],tab_col[11],tab_col[12],tab_col[13],
                              tab_col[14],tab_col[15],tab_col[16],
                              tab_col[21],tab_col[22],tab_col[23],tab_col[24],
-                             tab_col[25],tab_col[26],tab_col[27],tab_col[27],
+                             tab_col[25],tab_col[26],tab_col[27],tab_col[28],
                              tab_col[27],
                              comment[0],comment[1],comment[2],comment[3],
                              comment[4],comment[5],comment[6])

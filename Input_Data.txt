@@ -1,0 +1,3 @@
+Beaming parameter: 1.3
+Albedo: 0.2
+Relative reflectance: 1.4

@@ -11,7 +11,7 @@ import pandas as pd
 import astropy.units as u
 import neatm
 
-def calculate_brightness(lambdaMu,eta,pv,obs_date,asteroid):
+def calculate_brightness(lambdaMu,eta,pv,obs_date,asteroid,relative_reflectance):
     
     #convert the date in Julian days
     dt = pd.DatetimeIndex(['{0}'.format(obs_date)], dtype='datetime64[ns]', name=u'date', freq=None)
@@ -27,7 +27,7 @@ def calculate_brightness(lambdaMu,eta,pv,obs_date,asteroid):
     
     try:
         #make a string with all the data
-        alldata=[eros['H'][0], eros['G'][0],eros['alpha'][0],eros['r'][0],eros['delta'][0],eta,pv]
+        alldata=[eros['H'][0], eros['G'][0],eros['alpha'][0],eros['r'][0],eros['delta'][0],eta,pv,relative_reflectance]
         V=eros['V'][0]
     except:
         raise ValueError("Cannot get values from Horizons")
@@ -47,7 +47,7 @@ def calculate_brightness(lambdaMu,eta,pv,obs_date,asteroid):
             
     except:
         result=[] 
-      
+    
     alldata.append(result)
     return alldata,V
 

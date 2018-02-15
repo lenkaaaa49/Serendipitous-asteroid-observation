@@ -20,7 +20,7 @@ import astropy.units as u
 
 
 
-def importing_data(password,Obs_date,Special_id1,Vertex1,Vertex2,Vertex3,Vertex4,Instrument,Mode,lambdaMu,eta,pv,relative_reflectance):
+def importing_data(password,user,Obs_date,Special_id1,Vertex1,Vertex2,Vertex3,Vertex4,Instrument,Mode,lambdaMu,eta,pv,relative_reflectance):
     #check if wavelenght is too big
     try:
         for wav1 in lambdaMu:
@@ -30,7 +30,7 @@ def importing_data(password,Obs_date,Special_id1,Vertex1,Vertex2,Vertex3,Vertex4
         if lambdaMu>29.9999:
                 raise ValueError("Required wavelenght", lambdaMu,"is too big. Max 29.9999 micron")
     # Open database connection
-    db = pymysql.connect("localhost","root",password)
+    db = pymysql.connect("localhost","{0}".format(user),"{0}".format(password))
     # prepare a cursor object using cursor() method and go to the right database
     cursor = db.cursor()
     cursor.execute("USE ISPY")
@@ -46,7 +46,7 @@ def importing_data(password,Obs_date,Special_id1,Vertex1,Vertex2,Vertex3,Vertex4
     except:
        raise ValueError("Error: unable to delete data in the old table to update it")
     #get table name and create a table for this Specific ID
-    table_name,brightness=Setup_Table_in_MySQL_to_Fill_in_Data.makeMySQLtable(Special_id1,password,Obs_date,Vertex1,Vertex2,Vertex3,Vertex4,Instrument,Mode,lambdaMu)
+    table_name,brightness=Setup_Table_in_MySQL_to_Fill_in_Data.makeMySQLtable(Special_id1,password,user,Obs_date,Vertex1,Vertex2,Vertex3,Vertex4,Instrument,Mode,lambdaMu)
     Special_id=table_name        
     #update the fact that the data has been deleted
     time1=strftime("%Y-%m-%d %H:%M:%S", gmtime())+ ' UTC'
@@ -95,12 +95,12 @@ def importing_data(password,Obs_date,Special_id1,Vertex1,Vertex2,Vertex3,Vertex4
              'dRAcosD', 'dDEC_by_dt', 'CntDst', 'PsAng', 'Data_Arc', 'Nobs', 
              'SMAA_3sig', 'SMIA_3sig', 'Theta', 'Pixel_x', 'Pixel_y', 'Last_updated',
              table_name,'OBS_id',Special_id, 'H','G','alpha','r','delta',
-             'eta','pv']  
+             'eta','pv','Relative_reflectance']  
            
            #add Horizons data and the brightness
            asteroid=str(f[x][2]).strip("(")
            asteroid=str(asteroid).strip(")")
-           horizons,V=Calculate_Brightness.calculate_brightness(lambdaMu,eta,pv,Obs_date,f[x][2])
+           horizons,V=Calculate_Brightness.calculate_brightness(lambdaMu,eta,pv,Obs_date,f[x][2],relative_reflectance)
           
            #get the reflectance brightness
            reflectance=Ref_Brightness.Reflectance(relative_reflectance,V,lambdaMu)
@@ -109,17 +109,17 @@ def importing_data(password,Obs_date,Special_id1,Vertex1,Vertex2,Vertex3,Vertex4
            #add brightness values together
            Brightness=[]
            try:
-               if horizons[7]==[]:
+               if horizons[8]==[]:
                    Brightness='empty'
                else:
                    for xx in range(0,len(reflectance)):
-                       Brightness.append(horizons[7][xx]+reflectance[xx])
+                       Brightness.append(horizons[8][xx]+reflectance[xx])
 
            except: 
-               if horizons[7]==[]:
+               if horizons[8]==[]:
                    Brightness='empty'
                else:
-                   Brightness=horizons[7]+reflectance
+                   Brightness=horizons[8]+reflectance
 
     
            #input new data
@@ -138,7 +138,7 @@ def importing_data(password,Obs_date,Special_id1,Vertex1,Vertex2,Vertex3,Vertex4
                db.rollback()
                raise ValueError("Unable to import into table OBS_id:"+Special_id)
            #loop over all the columns in f(add data from ISPY)
-           for y in range(0,len(tab_col)-13):
+           for y in range(0,len(tab_col)-14):
                if y==0 or y==2 or y==3 or y==4:
                     sql1=0
                elif ma.getmask(f[x][y])==True:
@@ -162,7 +162,7 @@ def importing_data(password,Obs_date,Special_id1,Vertex1,Vertex2,Vertex3,Vertex4
                         raise ValueError("Unable to import into table OBS_id:"+Special_id)
            
            #loop over all the columns in horizons  (add data from Horizons and brightness)
-           for yy in range(21,28):
+           for yy in range(21,29):
                     sql3 = "UPDATE {0} SET {1}='{2}'\
                     where {3}={4}".format(tab_col[18],tab_col[yy],horizons[yy-21],tab_col[0],f[x][0])
                     #print (sql3)
@@ -178,7 +178,7 @@ def importing_data(password,Obs_date,Special_id1,Vertex1,Vertex2,Vertex3,Vertex4
            #print (horizons)             
            try:
                 for lam in range(0,len(lambdaMu)):
-                    if horizons[7]==[]:
+                    if horizons[8]==[]:
                         sql4="Not possible to calculate brightness"
                     
                     else:
@@ -196,7 +196,7 @@ def importing_data(password,Obs_date,Special_id1,Vertex1,Vertex2,Vertex3,Vertex4
                             db.rollback()  
                             raise ValueError("Unable to import into table OBS_id:"+Special_id)
            except:
-               if horizons[7]==[]:
+               if horizons[8]==[]:
                         sql4="Not possible to calculate brightness"
                else:
                     #add values for brightness 
