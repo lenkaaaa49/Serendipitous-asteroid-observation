@@ -66,3 +66,6 @@ def Create_dummy_input_Database(Login_Input):
     db.close()
     
     return 
+
+if __name__ == '__main__':
+    Create_dummy_input_Database('Login_Data.txt')
