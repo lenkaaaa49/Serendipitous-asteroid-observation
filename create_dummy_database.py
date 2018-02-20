@@ -12,8 +12,11 @@ import Read_Input_Files
 def Create_dummy_input_Database(Login_Input):
     #get data from the input files 
     user,password=Read_Input_Files.Get_user_password(Login_Input)
-    # Open database connection
-    db = pymysql.connect("localhost","{0}".format(user),"{0}".format(password))
+    try:
+        # Open database connection
+        db = pymysql.connect("localhost","{0}".format(user),"{0}".format(password))
+    except:
+        raise ValueError("Unable to log in with the user name and password")
     
     # prepare a cursor object using cursor() method
     cursor = db.cursor()
@@ -59,7 +62,7 @@ def Create_dummy_input_Database(Login_Input):
     except:
         # Rollback in case there is any error
         db.rollback()
-        print ("Error importing data into the table")
+        raise ValueError("Error importing data into the table")
     
     
     # disconnect from server
