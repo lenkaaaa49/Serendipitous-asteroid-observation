@@ -9,7 +9,7 @@ Created on Mon Feb  5 11:49:49 2018
 import callhorizons
 import pandas as pd
 import astropy.units as u
-import neatm
+import Neatm
 
 def calculate_brightness(lambdaMu,eta,pv,obs_date,asteroid,relative_reflectance):
     
