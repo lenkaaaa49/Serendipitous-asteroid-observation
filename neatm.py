@@ -27,7 +27,10 @@ def neatm(h,g,alpha,r,delta,lambdaMu,eta,pv, mJy=True):
     except UnitConversionError:
         print("Alpha must be an angle; r, delta, and lambdaMu must be (wave-)lengths")
         raise
-    cmd=['neatm']
+    try:
+        cmd=['neatm']
+    except:
+        raise ValueError("Cannot get neatm")
     for var in [h,g,alpha,r,delta,lambdaMu,eta,pv]:
         cmd.append(str(var))
     process=subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)

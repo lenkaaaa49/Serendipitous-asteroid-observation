@@ -5,7 +5,7 @@ Created on Thu Dec  7 15:18:20 2017
 
 @author: lenka
 """
-
+import Read_Input_Files
 import pymysql
 from astropy import units as u
 from astropy.coordinates import SkyCoord
@@ -13,9 +13,9 @@ from astropy.coordinates import ICRS, Galactic, FK4, FK5
 from DateTime import Timezones, DateTime
 zones = set(Timezones())
 #could put inputs such as the database name and the Migo input table
-def getinputs(password): 
+def getinputs(password,user): 
     # Open database connection
-    db = pymysql.connect("localhost","root",password )
+    db = pymysql.connect("localhost","{0}".format(user),"{0}".format(password))
     
     # prepare a cursor object using cursor() method
     cursor = db.cursor()
