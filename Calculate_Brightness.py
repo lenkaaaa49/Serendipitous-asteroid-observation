@@ -38,12 +38,12 @@ def calculate_brightness(lambdaMu,eta,pv,obs_date,asteroid,relative_reflectance)
         try:
             for wav in lambdaMu:
                 #use Neatm function to calculate the brightness
-                result1=neatm.neatm(alldata[0],alldata[1],alldata[2]*u.deg,alldata[3]*u.AU,alldata[4]*u.AU,wav*u.micron,eta,pv)
+                result1=Neatm.neatm(alldata[0],alldata[1],alldata[2]*u.deg,alldata[3]*u.AU,alldata[4]*u.AU,wav*u.micron,eta,pv)
                 result.append(result1)
         except:
             wav=lambdaMu
             #use Neatm function to calculate the brightness
-            result=neatm.neatm(alldata[0],alldata[1],alldata[2]*u.deg,alldata[3]*u.AU,alldata[4]*u.AU,wav*u.micron,eta,pv)
+            result=Neatm.neatm(alldata[0],alldata[1],alldata[2]*u.deg,alldata[3]*u.AU,alldata[4]*u.AU,wav*u.micron,eta,pv)
             
     except:
         result=[] 
