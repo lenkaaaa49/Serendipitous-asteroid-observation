@@ -100,7 +100,7 @@ def importing_data(password,user,Obs_date,Special_id1,Vertex1,Vertex2,Vertex3,Ve
            #add Horizons data and the brightness
            asteroid=str(f[x][2]).strip("(")
            asteroid=str(asteroid).strip(")")
-           horizons,V=Calculate_Brightness.calculate_brightness(lambdaMu,eta,pv,Obs_date,f[x][2],relative_reflectance)
+           horizons,V=Calculate_Brightness.calculate_brightness(lambdaMu,eta,pv,Obs_date,asteroid,relative_reflectance)
           
            #get the reflectance brightness
            reflectance=Ref_Brightness.Reflectance(relative_reflectance,V,lambdaMu)
