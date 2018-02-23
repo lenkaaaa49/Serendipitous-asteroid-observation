@@ -1,0 +1,38 @@
+
+\chapter{Tool requirements}
+\label{chap:2}
+
+This chapter elaborates on the required programs for the tool to work. It also specifies all the needed packages and functions.
+
+\section{Programs needed}
+As this code is made in Python 3.2.6., it is recommended to have installed Python version 3.2.6. or higher. As in the older version some functions might not work as desired. Also in version 2, the syntax is different than in version 3 and this would lead to errors in the code. The installation is done preferably with the help of Anaconda \cite{anac}. \\
+
+All the information about the asteroid are saved in MySQL database, and therefore MySQL \cite{mysql} needs to be installed as well. It is useful to have MySQL Workbench as this has a nice user interface and it is easy to examine the tables in the database. However, this is not necessary, as all the needed can be done trough the command prompt as well.\\
+
+The Neatm function, which calculates the thermal emission of asteroids, is developed in C++, therefore a C++ compiler is required to compile the neatm function.
+
+\section{Packages}
+For Python, multiple packages are needed to run the code as desired. These packages are listed below and can be easily installed with the help of anaconda prompt, using command \textit{conda install package name}. However, Anaconda is not able to install all the packages, in that case \textit{pip install package name} command can be used. Some of the packages could be already installed in the Anaconda environment by default.
+
+\begin{itemize}
+    \item astropy (package focused on astronomy and astrophysics)
+    \item callhorizons (package with Python interface to access JPL HORIZONS ephemerides and orbital elements)
+    \item DateTime - this is not the datetime package which is already part of the Python (package for helpful date format, able to work with time zones)
+    \item matplotlib - optional (package to create plots and figures)
+    \item numpy (package for scientific computing)
+    \item pandas (package for doing practical, real world data analysis in Python)
+    \item pymysql (package which provides the connection between Python and MySQL)
+    \item scipy (package for scientific computing and technical computing)
+ 
+\end{itemize}
+
+\section{Other functions}
+Neatm function is a function developed by Migo Mueller \cite{neatm}. It calculates the thermal emission of an asteroid following the Near-Earth Asteroid Thermal Model \cite{neatmm}.\\
+
+To be able to use the code, few steps needs to be taken to install the Neatm function.\\
+First, download the
+source code from \cite{neatm}. 
+Second, run 'make' in this directory, this requires C++ compiler g++. 
+Then, move the resulting binary (Neatm) to a directory within your \$PATH.
+Now the Neatm function should be accessible by the python code.
+If, for some reason, Python still cannot find Neatm during the run of the code, it is possible to make it work by moving the Neatm executable to the same folder as the script.
