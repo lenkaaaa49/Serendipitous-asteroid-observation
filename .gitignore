@@ -155,3 +155,8 @@ venv.bak/
 ## MM, 2018/01/24:
 # General
 *~
+# LaTeX
+*.log
+*.aux
+*.toc
+
