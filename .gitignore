@@ -159,4 +159,6 @@ venv.bak/
 *.log
 *.aux
 *.toc
-
+*.bbl
+*.blg
+*.out
